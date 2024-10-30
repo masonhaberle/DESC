@@ -435,7 +435,7 @@ def _parse_constraints(constraints):
 
     """
     if not isinstance(constraints, (tuple, list)):
-        constraints = (constraints,)
+        constraints = [constraints]
     # we treat linear bound constraints as nonlinear since they can't be easily
     # factorized like linear equality constraints
     linear_constraints = tuple(

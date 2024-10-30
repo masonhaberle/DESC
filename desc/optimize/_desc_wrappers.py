@@ -468,6 +468,7 @@ def _optimize_pdfo(objective, constraint, x0, method, x_scale, verbose, stoptol,
     options["quiet"] = not verbose
     options["maxfev"] = stoptol["max_nfev"]
     options["radius_final"] = stoptol["xtol"]
+    
     #Assume minimum is at 0
     #options["ftarget"] = stoptol["ftol"]
     x_scale = 1 if x_scale == "auto" else x_scale
