@@ -1,6 +1,8 @@
 from scipy.optimize import NonlinearConstraint
+from scipy.optimize import OptimizeResult
 
 from desc.backend import jnp
+import numpy as np
 
 from .aug_lagrangian import fmin_auglag
 from .aug_lagrangian_ls import lsq_auglag
@@ -9,6 +11,9 @@ from .least_squares import lsqtr
 from .optimizer import register_optimizer
 from .stochastic import sgd
 from pdfo import pdfo
+from turbo import Turbo1, TurboM
+
+import inspect
 
 
 @register_optimizer(
@@ -486,5 +491,132 @@ def _optimize_pdfo(objective, constraint, x0, method, x_scale, verbose, stoptol,
         constraint_wrapped = None
 
     result = pdfo(fun, x0=x0, constraints=constraint_wrapped, options=options)
+
+    return result
+
+
+
+@register_optimizer(
+    name="Turbo1",
+    description="Trust Region Bayesian Optimizer, 1 Trust Region",
+    scalar=True,
+    equality_constraints=True,
+    inequality_constraints=True,
+    hessian=False,
+    stochastic=True,
+    GPU=False
+)
+def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stoptol, options=None):
+    '''
+    Wrapper for TuRBO-1 global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
+    '''
+
+    options = {} if options is None else options
+    if "batch_size" not in options:
+        options["batch_size"] = 10
+    if "use_ard" not in options:
+        options["use_ard"] = True
+    if "cholesky_size" not in options:
+        options["cholesky_size"] = 2000
+    if "training_steps" not in options:
+        options["training_steps"] = 50
+
+    fun = objective.compute_scalar
+    print(inspect.getargspec(fun))
+    #print(jnp.asarray(objective.x))
+    print(objective.dim_x)
+
+    print(constraint)
+    
+    ub = (0.9) ** np.arange(316)
+    lb = -ub
+    
+    turbo1 = Turbo1(f = fun,
+                    lb = lb, #constraint.bounds_scaled[0],
+                    ub = ub, #constraint.bounds_scaled[1],
+                    n_init = 2*len(lb),
+                    max_evals = 1000, #stoptol["max_nfev"],
+                    batch_size = options["batch_size"],
+                    verbose = verbose > 0,
+                    use_ard = options["use_ard"],
+                    max_cholesky_size = options["cholesky_size"],
+                    n_training_steps = options["training_steps"],
+                    min_cuda = 1024,
+                    device = "cpu",
+                    dtype = "float64"
+                   )
+    turbo1.optimize()
+    X = turbo1.X
+    fX = turbo1.fX
+    ind_best = np.argmin(fX)
+    f_best, x_best = fX[ind_best], X[ind_best, :]
+    
+    result = OptimizeResult()
+    result.success = True
+    result.x = x_best
+    result.fun = f_best
+    result.allx = X
+    result.allfun = fX
+
+    return result
+
+    
+
+@register_optimizer(
+    name="TurboM",
+    description="Trust Region Bayesian Optimizer, M Trust Regions",
+    scalar=True,
+    equality_constraints=False,
+    inequality_constraints=True,
+    hessian=False,
+    stochastic=True,
+    GPU=False
+)
+def _optimize_TurboM(objective, constraint, x0, method, x_scale, verbose, stoptol, options=None):
+    '''
+    Wrapper for TuRBO-1 global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
+    '''
+
+    options = {} if options is None else options
+    if "batch_size" not in options:
+        options["batch_size"] = 10
+    if "use_ard" not in options:
+        options["use_ard"] = True
+    if "cholesky_size" not in options:
+        options["cholesky_size"] = 2000
+    if "training_steps" not in options:
+        options["training_steps"] = 50
+    if "trust_regions" not in options:
+        options["trust_regions"] = 5
+
+    fun = objective.compute_scalar
+    print(fun)
+    turboM = TurboM(f = fun,
+                    lb = [], #constraint.bounds_scaled[0],
+                    ub = [], #constraint.bounds_scaled[1],
+                    n_init = 10,
+                    max_evals = stoptol["max_nfev"],
+                    n_trust_regions = options["trust_regions"],
+                    batch_size = options["batch_size"],
+                    verbose = verbose > 0,
+                    use_ard = options["use_ard"],
+                    max_cholesky_size = options["cholesky_size"],
+                    n_training_steps = options["training_steps"],
+                    min_cuda = 1024,
+                    device = "cpu",
+                    dtype = "float64"
+                   )
+    turboM.optimize()
+    X = turboM.X
+    fX = turboM.fX
+    ind_best = np.argmin(fX)
+    f_best, x_best = fX[ind_best], X[ind_best, :]
+    
+    result = OptimizeResult()
+    result.success = True
+    result.x = x_best
+    result.fun = f_best
+    result.allx = X
+    result.allfun = fX
 
     return result
