@@ -523,12 +523,16 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
 
     fun = objective.compute_scalar
     print(inspect.getargspec(fun))
-    #print(jnp.asarray(objective.x))
+    print(objective.x())
+    lenObj = len(objective.x())
+    print(lenObj)
     print(objective.dim_x)
 
-    print(constraint)
     
-    ub = (0.9) ** np.arange(316)
+    print(constraint.objectives)
+    print(constraint.objectives[0].bounds)
+    
+    ub = (0.9) ** np.arange(253)
     lb = -ub
     
     turbo1 = Turbo1(f = fun,
