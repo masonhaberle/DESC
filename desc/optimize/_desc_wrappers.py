@@ -520,26 +520,26 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
         options["cholesky_size"] = 2000
     if "training_steps" not in options:
         options["training_steps"] = 50
+    if "box_size" not in options:
+        options["box_size"] = 0.2
+    if "max_iter" not in stoptol:
+        stoptol["max_iter"] = 500
 
     fun = objective.compute_scalar
-    print(inspect.getargspec(fun))
-    print(objective.x())
+    #print(inspect.getargspec(fun))
+    #print(objective.x())
     lenObj = len(objective.x())
-    print(lenObj)
-    print(objective.dim_x)
 
-    
-    print(constraint.objectives)
-    print(constraint.objectives[0].bounds)
-    
-    ub = (0.9) ** np.arange(253)
-    lb = -ub
+    x0array = np.array(x0)
+    boxsize = options["box_size"]
+    ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
+    lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
     
     turbo1 = Turbo1(f = fun,
                     lb = lb, #constraint.bounds_scaled[0],
                     ub = ub, #constraint.bounds_scaled[1],
-                    n_init = 2*len(lb),
-                    max_evals = 1000, #stoptol["max_nfev"],
+                    n_init = 2*lenObj,
+                    max_evals = stoptol["maxiter"] + 2*lenObj,
                     batch_size = options["batch_size"],
                     verbose = verbose > 0,
                     use_ard = options["use_ard"],
@@ -555,12 +555,14 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     ind_best = np.argmin(fX)
     f_best, x_best = fX[ind_best], X[ind_best, :]
     
+    
     result = OptimizeResult()
     result.success = True
     result.x = x_best
     result.fun = f_best
     result.allx = X
     result.allfun = fX
+    result.nfev = turbo1.n_evals
 
     return result
 
@@ -578,9 +580,10 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
 )
 def _optimize_TurboM(objective, constraint, x0, method, x_scale, verbose, stoptol, options=None):
     '''
-    Wrapper for TuRBO-1 global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
+    Wrapper for TuRBO-M global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
     '''
 
+    
     options = {} if options is None else options
     if "batch_size" not in options:
         options["batch_size"] = 10
@@ -592,14 +595,26 @@ def _optimize_TurboM(objective, constraint, x0, method, x_scale, verbose, stopto
         options["training_steps"] = 50
     if "trust_regions" not in options:
         options["trust_regions"] = 5
+    if "box_size" not in options:
+        options["box_size"] = 0.2
+    if "max_iter" not in stoptol:
+        stoptol["max_iter"] = 500
 
     fun = objective.compute_scalar
-    print(fun)
+    #print(inspect.getargspec(fun))
+    #print(objective.x())
+    lenObj = len(objective.x())
+
+    x0array = np.array(x0)
+    boxsize = options["box_size"]
+    ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
+    lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
+    
     turboM = TurboM(f = fun,
-                    lb = [], #constraint.bounds_scaled[0],
-                    ub = [], #constraint.bounds_scaled[1],
-                    n_init = 10,
-                    max_evals = stoptol["max_nfev"],
+                    lb = lb, #constraint.bounds_scaled[0],
+                    ub = ub, #constraint.bounds_scaled[1],
+                    n_init = 2*lenObj,
+                    max_evals = stoptol["maxiter"] + 2*lenObj*options["trust_regions"],
                     n_trust_regions = options["trust_regions"],
                     batch_size = options["batch_size"],
                     verbose = verbose > 0,
@@ -622,5 +637,6 @@ def _optimize_TurboM(objective, constraint, x0, method, x_scale, verbose, stopto
     result.fun = f_best
     result.allx = X
     result.allfun = fX
+    result.nfev = turboM.n_evals
 
     return result

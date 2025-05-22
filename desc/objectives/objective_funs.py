@@ -869,6 +869,7 @@ class _Objective(IOAble, ABC):
                 if not is_broadcastable((self.dim_f,), bound.shape) or (
                     self.dim_f == 1 and bound.size != 1
                 ):
+                    print(len(bound), self.dim_f)
                     raise ValueError("len(bounds) != dim_f")
             if np.any(self.bounds[1] < self.bounds[0]):
                 raise ValueError("bounds must be: (lower bound, upper bound)")
