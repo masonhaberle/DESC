@@ -416,6 +416,7 @@ def lsqtr(  # noqa: C901 - FIXME: simplify this
         allx=allx,
         alltr=alltr,
     )
+
     if verbose > 0:
         if result["success"]:
             print(result["message"])

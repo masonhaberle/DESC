@@ -526,15 +526,14 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
         stoptol["max_iter"] = 500
 
     fun = objective.compute_scalar
+    # fun = objective.compute_scaled_error
     #print(inspect.getargspec(fun))
-    #print(objective.x())
     lenObj = len(objective.x())
 
     x0array = np.array(x0)
     boxsize = options["box_size"]
     ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
     lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
-    
     turbo1 = Turbo1(f = fun,
                     lb = lb, #constraint.bounds_scaled[0],
                     ub = ub, #constraint.bounds_scaled[1],
@@ -554,7 +553,8 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     fX = turbo1.fX
     ind_best = np.argmin(fX)
     f_best, x_best = fX[ind_best], X[ind_best, :]
-    
+    print("f_best", f_best)
+    print("fun(x_best)", fun(x_best), "x_best.shape", x_best.shape)    
     
     result = OptimizeResult()
     result.success = True
