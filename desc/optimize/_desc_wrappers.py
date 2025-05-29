@@ -6,12 +6,13 @@ import numpy as np
 
 from .aug_lagrangian import fmin_auglag
 from .aug_lagrangian_ls import lsq_auglag
+from .utils import compute_hess_scale, compute_jac_scale
 from .fmin_scalar import fmintr
 from .least_squares import lsqtr
 from .optimizer import register_optimizer
 from .stochastic import sgd
 from pdfo import pdfo
-from turbo import Turbo1, TurboM
+from turbo import DTurbo1, Turbo1, TurboM
 
 import inspect
 
@@ -48,13 +49,13 @@ def _optimize_desc_aug_lagrangian(
         Starting point.
     method : {"fmin-auglag", "fmin-auglag-bfgs"}
         Name of the method to use.
-    x_scale : array_like or ‘jac’, optional
+    x_scale : array_like or 'jac', optional
         Characteristic scale of each variable. Setting x_scale is equivalent to
         reformulating the problem in scaled variables xs = x / x_scale. An alternative
         view is that the size of a trust region along jth dimension is proportional to
         x_scale[j]. Improved convergence may be achieved by setting x_scale such that
         a step of a given size along any of the scaled variables has a similar effect
-        on the cost function. If set to ‘jac’, the scale is iteratively updated using
+        on the cost function. If set to 'jac', the scale is iteratively updated using
         the inverse norms of the columns of the Jacobian matrix.
     verbose : int
         * 0  : work silently.
@@ -144,13 +145,13 @@ def _optimize_desc_aug_lagrangian_least_squares(
         Starting point.
     method : {"lsq-auglag"}
         Name of the method to use.
-    x_scale : array_like or ‘jac’, optional
+    x_scale : array_like or 'jac', optional
         Characteristic scale of each variable. Setting x_scale is equivalent to
         reformulating the problem in scaled variables xs = x / x_scale. An alternative
         view is that the size of a trust region along jth dimension is proportional to
         x_scale[j]. Improved convergence may be achieved by setting x_scale such that
         a step of a given size along any of the scaled variables has a similar effect
-        on the cost function. If set to ‘jac’, the scale is iteratively updated using
+        on the cost function. If set to 'jac', the scale is iteratively updated using
         the inverse norms of the columns of the Jacobian matrix.
     verbose : int
         * 0  : work silently.
@@ -235,13 +236,13 @@ def _optimize_desc_least_squares(
         Starting point.
     method : {"lsq-exact"}
         Name of the method to use.
-    x_scale : array_like or ‘jac’, optional
+    x_scale : array_like or 'jac', optional
         Characteristic scale of each variable. Setting x_scale is equivalent to
         reformulating the problem in scaled variables xs = x / x_scale. An alternative
         view is that the size of a trust region along jth dimension is proportional to
         x_scale[j]. Improved convergence may be achieved by setting x_scale such that
         a step of a given size along any of the scaled variables has a similar effect
-        on the cost function. If set to ‘jac’, the scale is iteratively updated using
+        on the cost function. If set to 'jac', the scale is iteratively updated using
         the inverse norms of the columns of the Jacobian matrix.
     verbose : int
         * 0  : work silently.
@@ -324,13 +325,13 @@ def _optimize_desc_fmin_scalar(
         Starting point.
     method : str
         Name of the method to use.
-    x_scale : array_like or ‘jac’, optional
+    x_scale : array_like or 'jac', optional
         Characteristic scale of each variable. Setting x_scale is equivalent to
         reformulating the problem in scaled variables xs = x / x_scale. An alternative
         view is that the size of a trust region along jth dimension is proportional to
         x_scale[j]. Improved convergence may be achieved by setting x_scale such that
         a step of a given size along any of the scaled variables has a similar effect
-        on the cost function. If set to ‘jac’, the scale is iteratively updated using
+        on the cost function. If set to 'jac', the scale is iteratively updated using
         the inverse norms of the columns of the Jacobian matrix.
     verbose : int
         * 0  : work silently.
@@ -407,13 +408,13 @@ def _optimize_desc_stochastic(
         Starting point.
     method : str
         Name of the method to use.
-    x_scale : array_like or ‘jac’, optional
+    x_scale : array_like or 'jac', optional
         Characteristic scale of each variable. Setting x_scale is equivalent to
         reformulating the problem in scaled variables xs = x / x_scale. An alternative
         view is that the size of a trust region along jth dimension is proportional to
         x_scale[j]. Improved convergence may be achieved by setting x_scale such that
         a step of a given size along any of the scaled variables has a similar effect
-        on the cost function. If set to ‘jac’, the scale is iteratively updated using
+        on the cost function. If set to 'jac', the scale is iteratively updated using
         the inverse norms of the columns of the Jacobian matrix.
     verbose : int
         * 0  : work silently.
@@ -531,12 +532,36 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     lenObj = len(objective.x())
 
     x0array = np.array(x0)
+    # Adaptive bounds using Hessian scale
+    # try:
+    # J = objective.jac_scaled_error(x0)
+    # H = objective.hess(x0)
+    # scale, _ = compute_hess_scale(H)
+    # scale, _ = compute_jac_scale(J)
+
+    # except Exception:
+    #     scale = np.abs(x0array) + 1e-8  # fallback if Hessian fails
+    # x0array = x0array / scale
     boxsize = options["box_size"]
+    # min_scale = 1e-12
+    # lb = np.array(x0array - boxsize * np.maximum(scale, min_scale))
+    # ub = np.array(x0array + boxsize * np.maximum(scale, min_scale))
+    # ub = np.ones(lenObj) * x0array + min_scale
+    # lb = np.ones(lenObj) * x0array - min_scale
+    # inds = np.where(np.abs(x0array) > 1e-6)
+    # ub[inds] = x0array[inds] + 1e-2
+    # lb[inds] = x0array[inds] - 1e-2
+
     ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
     lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
+    print("ub - lb", np.max(ub - lb), np.min(ub - lb), np.mean(ub - lb))
+    # print("scale", scale)
+    print("lb", lb)
+    print("ub", ub)
     turbo1 = Turbo1(f = fun,
                     lb = lb, #constraint.bounds_scaled[0],
                     ub = ub, #constraint.bounds_scaled[1],
+                    # scale=scale,
                     n_init = 2*lenObj,
                     max_evals = stoptol["maxiter"] + 2*lenObj,
                     batch_size = options["batch_size"],
@@ -567,6 +592,99 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     return result
 
     
+
+@register_optimizer(
+    name="DTurbo1",
+    description="Trust Region Bayesian Optimizer, 1 Trust Region",
+    scalar=True,
+    equality_constraints=True,
+    inequality_constraints=True,
+    hessian=False,
+    stochastic=True,
+    GPU=False
+)
+def _optimize_DTurbo1(objective, constraint, x0, method, x_scale, verbose, stoptol, options=None):
+    '''
+    Wrapper for TuRBO-1 global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
+    '''
+
+    options = {} if options is None else options
+    if "batch_size" not in options:
+        options["batch_size"] = 10
+    if "use_ard" not in options:
+        options["use_ard"] = True
+    if "cholesky_size" not in options:
+        options["cholesky_size"] = 2000
+    if "training_steps" not in options:
+        options["training_steps"] = 50
+    if "box_size" not in options:
+        options["box_size"] = 0.2
+    if "max_iter" not in stoptol:
+        stoptol["max_iter"] = 500
+
+    fun = objective.compute_scalar
+    # fun = objective.compute_scaled_error
+    #print(inspect.getargspec(fun))
+    lenObj = len(objective.x())
+
+    x0array = np.array(x0)
+    # Adaptive bounds using Hessian scale
+    # try:
+    J = objective.jac_scaled_error(x0)
+    # H = objective.hess(x0)
+    # scale, _ = compute_hess_scale(H)
+    scale, _ = compute_jac_scale(J)
+
+    # except Exception:
+    #     scale = np.abs(x0array) + 1e-8  # fallback if Hessian fails
+    # x0array = x0array / scale
+    boxsize = options["box_size"]
+    min_scale = 1e-12
+    lb = np.array(x0array - boxsize * np.maximum(scale, min_scale))
+    ub = np.array(x0array + boxsize * np.maximum(scale, min_scale))
+
+    # ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
+    # lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
+    print("ub - lb", np.max(ub - lb), np.min(ub - lb), np.mean(ub - lb))
+    # print("scale", scale)
+    print("lb", lb)
+    print("ub", ub)
+    turbo1 = DTurbo1(f = fun,
+                    df = objective.grad,
+                    lb = lb, #constraint.bounds_scaled[0],
+                    ub = ub, #constraint.bounds_scaled[1],
+                    num_directions = 10,
+                    minibatch_size = 20,
+                    num_inducing=10,
+                    n_init = 2*lenObj,
+                    max_evals = stoptol["maxiter"] + 2*lenObj,
+                    batch_size = options["batch_size"],
+                    verbose = verbose > 0,
+                    use_ard = options["use_ard"],
+                    max_cholesky_size = options["cholesky_size"],
+                    n_training_steps = options["training_steps"],
+                    min_cuda = 1024,
+                    device = "cpu",
+                    dtype = "float64"
+                   )
+    turbo1.optimize()
+    X = turbo1.X
+    fX = turbo1.fX
+    ind_best = np.argmin(fX)
+    f_best, x_best = fX[ind_best], X[ind_best, :]
+    print("f_best", f_best)
+    print("fun(x_best)", fun(x_best), "x_best.shape", x_best.shape)    
+    
+    result = OptimizeResult()
+    result.success = True
+    result.x = x_best
+    result.fun = f_best
+    result.allx = X
+    result.allfun = fX
+    result.nfev = turbo1.n_evals
+
+    return result
+
 
 @register_optimizer(
     name="TurboM",

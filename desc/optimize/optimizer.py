@@ -271,6 +271,7 @@ class Optimizer(IOAble):
         # different from objective.things, to ensure the correct order is passed
         # to the objective
         x0 = objective.x(*[things[things.index(t)] for t in objective.things])
+        print("x0", x0)
 
         stoptol = _get_default_tols(
             method,
@@ -313,6 +314,7 @@ class Optimizer(IOAble):
             stoptol,
             options,
         )
+        result.x0 = x0
 
         if isinstance(objective, LinearConstraintProjection):
             # remove wrapper to get at underlying objective
