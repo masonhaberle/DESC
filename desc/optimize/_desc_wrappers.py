@@ -535,8 +535,8 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     # Adaptive bounds using Hessian scale
     # try:
     # J = objective.jac_scaled_error(x0)
-    # H = objective.hess(x0)
-    # scale, _ = compute_hess_scale(H)
+    H = objective.hess(x0)
+    scale, _ = compute_hess_scale(H)
     # scale, _ = compute_jac_scale(J)
 
     # except Exception:
@@ -554,6 +554,10 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
 
     ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
     lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
+    # If you have Hessian H and domain bounds (ub - lb)
+    # hessian_scales = 1.0 / np.sqrt(np.abs(np.diag(H)))  # Your current approach
+    # domain_scales = (ub - lb) / 10
+    # scale = np.minimum(scale, domain_scales)
     print("ub - lb", np.max(ub - lb), np.min(ub - lb), np.mean(ub - lb))
     # print("scale", scale)
     print("lb", lb)
@@ -571,7 +575,8 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
                     n_training_steps = options["training_steps"],
                     min_cuda = 1024,
                     device = "cpu",
-                    dtype = "float64"
+                    dtype = "float64",
+                    # initial_lengthscales=scale
                    )
     turbo1.optimize()
     X = turbo1.X
