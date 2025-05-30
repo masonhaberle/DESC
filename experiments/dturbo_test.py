@@ -75,7 +75,7 @@ for maxMode in range(1,2):
         #FixPressure(eq=eq_qs, weight=constWeight),
         #FixCurrent(eq=eq_qs, weight=constWeight),
         #FixPsi(eq=eq_qs, weight=constWeight),
-        ForceBalance(eq=eq_qs, weight=10),
+        # ForceBalance(eq=eq_qs, weight=10),
     ))
 
     numRbounds = len(free_R_modes)
@@ -134,7 +134,7 @@ objective_f = ObjectiveFunction((
     #FixPressure(eq=eq_qs, weight=constWeight),
     #FixCurrent(eq=eq_qs, weight=constWeight),
     #FixPsi(eq=eq_qs, weight=constWeight),
-    ForceBalance(eq=eq_qs, weight=10),
+    # ForceBalance(eq=eq_qs, weight=10),
 ))
 optimizer = Optimizer("DTurbo1")
 
@@ -168,7 +168,7 @@ for maxMode in range(1,2):
         x_scale = np.ones(363),
         verbose=2,
         maxiter=10000,
-        options={"trust_regions":1, "box_size":1e-1, "training_steps": 50, "batch_size":200}
+        options={"trust_regions":1, "box_size":1, "training_steps": 50, "batch_size":20}
     )
 
 

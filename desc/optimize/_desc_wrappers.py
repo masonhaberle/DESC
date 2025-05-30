@@ -645,11 +645,11 @@ def _optimize_DTurbo1(objective, constraint, x0, method, x_scale, verbose, stopt
     # x0array = x0array / scale
     boxsize = options["box_size"]
     min_scale = 1e-12
-    lb = np.array(x0array - boxsize * np.maximum(scale, min_scale))
-    ub = np.array(x0array + boxsize * np.maximum(scale, min_scale))
+    # lb = np.array(x0array - boxsize * np.maximum(scale, min_scale))
+    # ub = np.array(x0array + boxsize * np.maximum(scale, min_scale))
 
-    # ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
-    # lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
+    ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
+    lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
     print("ub - lb", np.max(ub - lb), np.min(ub - lb), np.mean(ub - lb))
     # print("scale", scale)
     print("lb", lb)
@@ -658,8 +658,8 @@ def _optimize_DTurbo1(objective, constraint, x0, method, x_scale, verbose, stopt
                     df = objective.grad,
                     lb = lb, #constraint.bounds_scaled[0],
                     ub = ub, #constraint.bounds_scaled[1],
-                    num_directions = 10,
-                    minibatch_size = 20,
+                    num_directions = 1,
+                    minibatch_size = 10,
                     num_inducing=10,
                     n_init = 2*lenObj,
                     max_evals = stoptol["maxiter"] + 2*lenObj,

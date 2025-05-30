@@ -54,11 +54,14 @@ grid = ConcentricGrid(
 # Create objectives
 force_objective = ObjectiveFunction((
     ForceBalance(eq=eq, weight=1.0),
+    AspectRatio(eq=eq, weight=1e10, target=5.0),
 ))
 
 aspect_objective = ObjectiveFunction((
-    AspectRatio(eq=eq, weight=1.0, target=6.0),
+    AspectRatio(eq=eq, weight=1, target=5.0),
 ))
+
+# force_objective += aspect_objective
 
 quasisym_objective = ObjectiveFunction((
     QuasisymmetryTripleProduct(eq=eq),
@@ -82,7 +85,7 @@ n_dof = len(x0)
 plt.figure(figsize=(12, 8))
 for flat_idx in range(n_dof):
     base_value = x0[flat_idx]
-    values = np.linspace(base_value - 1, base_value + 1, 5000)
+    values = np.linspace(base_value - 1, base_value + 1, 500)
     force_errors = []
     for val in values:
         x_temp = np.array(x0)
@@ -107,7 +110,7 @@ print(f"Plot saved as force_balance_all_dofs.png")
 plt.figure(figsize=(12, 8))
 for flat_idx in range(n_dof):
     base_value = x0[flat_idx]
-    values = np.linspace(base_value - 1, base_value + 1, 5000)
+    values = np.linspace(base_value - 1, base_value + 1, 500)
     aspect_errors = []
     for val in values:
         x_temp = np.array(x0)
@@ -132,7 +135,7 @@ print(f"Plot saved as aspect_ratio_all_dofs.png")
 plt.figure(figsize=(12, 8))
 for flat_idx in range(n_dof):
     base_value = x0[flat_idx]
-    values = np.linspace(base_value - 1, base_value + 1, 5000)
+    values = np.linspace(base_value - 1, base_value + 1, 500)
     quasisym_errors = []
     for val in values:
         x_temp = np.array(x0)
@@ -155,7 +158,7 @@ print(f"Plot saved as quasisymmetry_all_dofs.png")
 plt.figure(figsize=(12, 8))
 for flat_idx in range(n_dof):
     base_value = x0[flat_idx]
-    values = np.linspace(base_value - 1, base_value + 1, 5000)
+    values = np.linspace(base_value - 1, base_value + 1, 500)
     iota_errors = []
     for val in values:
         x_temp = np.array(x0)
@@ -170,6 +173,50 @@ plt.title('Iota Profile vs Each Degree of Freedom')
 plt.grid(True)
 plt.tight_layout()
 plt.savefig('iota_profile_all_dofs.png')
-plt.show()
+# plt.show()
 
-print(f"Plot saved as iota_profile_all_dofs.png") 
+print(f"Plot saved as iota_profile_all_dofs.png")
+
+# --- Find the two most influential parameters for force balance ---
+force_ranges = []
+force_curves = []
+for flat_idx in range(n_dof):
+    base_value = x0[flat_idx]
+    values = np.linspace(base_value - 1, base_value + 1, 200)
+    force_errors = []
+    for val in values:
+        x_temp = np.array(x0)
+        x_temp[flat_idx] = val
+        error = force_objective.compute_scalar(x_temp)
+        force_errors.append(error)
+    force_curves.append(force_errors)
+    force_ranges.append(np.max(force_errors) - np.min(force_errors))
+
+force_ranges = np.array(force_ranges)
+top2 = np.argsort(force_ranges)[-2:][::-1]
+print(f"Most influential parameter indices: {top2}")
+
+# --- Contour plot for the two most influential parameters ---
+idx1, idx2 = top2
+base1, base2 = x0[idx1], x0[idx2]
+vals1 = np.linspace(base1 - 1, base1 + 1, 500)
+vals2 = np.linspace(base2 - 1, base2 + 1, 500)
+F = np.zeros((len(vals1), len(vals2)))
+for i, v1 in enumerate(vals1):
+    for j, v2 in enumerate(vals2):
+        x_temp = np.array(x0)
+        x_temp[idx1] = v1
+        x_temp[idx2] = v2
+        F[i, j] = force_objective.compute_scalar(x_temp)
+
+plt.figure(figsize=(8,6))
+X, Y = np.meshgrid(vals1 - base1, vals2 - base2, indexing='ij')
+cp = plt.contourf(X, Y, np.log10(F), levels=50, cmap='viridis')
+plt.colorbar(cp, label='log10(Force Balance Objective)')
+plt.xlabel(f'Param {idx1} (delta from base)')
+plt.ylabel(f'Param {idx2} (delta from base)')
+plt.title('Force Balance Objective Contour')
+plt.tight_layout()
+plt.savefig('force_balance_contour.png')
+plt.show()
+print('Contour plot saved as force_balance_contour.png') 

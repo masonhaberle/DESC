@@ -2082,6 +2082,7 @@ class Equilibrium(IOAble, Optimizable):
         options=None,
         verbose=1,
         copy=False,
+        perturb_scale=None,
     ):
         """Optimize an equilibrium for an objective.
 
@@ -2147,6 +2148,7 @@ class Equilibrium(IOAble, Optimizable):
             maxiter=maxiter,
             options=options,
             copy=copy,
+            perturb_scale=perturb_scale,
         )
 
         return things[0], result

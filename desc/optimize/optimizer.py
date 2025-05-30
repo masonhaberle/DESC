@@ -90,6 +90,7 @@ class Optimizer(IOAble):
         maxiter=None,
         options=None,
         copy=False,
+        perturb_scale=None,
     ):
         """Optimize an objective function.
 
@@ -271,7 +272,9 @@ class Optimizer(IOAble):
         # different from objective.things, to ensure the correct order is passed
         # to the objective
         x0 = objective.x(*[things[things.index(t)] for t in objective.things])
-        print("x0", x0)
+        if perturb_scale is not None:
+            x0 = x0 + perturb_scale * np.random.standard_normal(x0.shape)
+        # print("x0", x0)
 
         stoptol = _get_default_tols(
             method,
