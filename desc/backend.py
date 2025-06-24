@@ -59,6 +59,10 @@ else:
                 desc.__version__, np.__version__, y.dtype
             )
         )
+    except RuntimeError:
+        set_device("cpu")
+        use_jax = True
+        print("Couldn't make gpu work")
 print(
     "Using device: {}, with {:.2f} GB available memory".format(
         desc_config.get("device"), desc_config.get("avail_mem")

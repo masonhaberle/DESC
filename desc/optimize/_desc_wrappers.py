@@ -12,7 +12,8 @@ from .least_squares import lsqtr
 from .optimizer import register_optimizer
 from .stochastic import sgd
 from pdfo import pdfo
-from turbo import DTurbo1, Turbo1, TurboM
+#from turbo import DTurbo1, Turbo1, TurboM
+from turbo import Turbo1, TurboM
 
 import inspect
 
@@ -558,16 +559,16 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     # hessian_scales = 1.0 / np.sqrt(np.abs(np.diag(H)))  # Your current approach
     # domain_scales = (ub - lb) / 10
     # scale = np.minimum(scale, domain_scales)
-    print("ub - lb", np.max(ub - lb), np.min(ub - lb), np.mean(ub - lb))
+    #print("ub - lb", np.max(ub - lb), np.min(ub - lb), np.mean(ub - lb))
     # print("scale", scale)
-    print("lb", lb)
-    print("ub", ub)
+    #print("lb", lb)
+    #print("ub", ub)
     turbo1 = Turbo1(f = fun,
                     lb = lb, #constraint.bounds_scaled[0],
                     ub = ub, #constraint.bounds_scaled[1],
                     # scale=scale,
                     n_init = 2*lenObj,
-                    max_evals = stoptol["maxiter"] + 2*lenObj,
+                    max_evals = stoptol["maxiter"] + lenObj,
                     batch_size = options["batch_size"],
                     verbose = verbose > 0,
                     use_ard = options["use_ard"],
@@ -583,8 +584,8 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     fX = turbo1.fX
     ind_best = np.argmin(fX)
     f_best, x_best = fX[ind_best], X[ind_best, :]
-    print("f_best", f_best)
-    print("fun(x_best)", fun(x_best), "x_best.shape", x_best.shape)    
+    #print("f_best", f_best)
+    #print("fun(x_best)", fun(x_best), "x_best.shape", x_best.shape)    
     
     result = OptimizeResult()
     result.success = True
