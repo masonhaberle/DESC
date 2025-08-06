@@ -11,7 +11,6 @@ from .fmin_scalar import fmintr
 from .least_squares import lsqtr
 from .optimizer import register_optimizer
 from .stochastic import sgd
-from pdfo import pdfo
 #from turbo import DTurbo1, Turbo1, TurboM
 from turbo import Turbo1, TurboM
 
@@ -457,7 +456,7 @@ def _optimize_desc_stochastic(
     return result
 
 
-@register_optimizer(
+'''@register_optimizer(
     name="pdfo",
     description="Powell's Derivative Free Global Optimizer, see https://pdfo.net/index.html",
     scalar=True,
@@ -468,9 +467,9 @@ def _optimize_desc_stochastic(
     GPU=False
 )
 def _optimize_pdfo(objective, constraint, x0, method, x_scale, verbose, stoptol, options=None):
-    '''
-    Wrapper for pdfo global optimizer.
-    '''
+
+    #Wrapper for pdfo global optimizer.
+    
     options = {} if options is None else options
     options["quiet"] = not verbose
     options["maxfev"] = stoptol["max_nfev"]
@@ -494,7 +493,7 @@ def _optimize_pdfo(objective, constraint, x0, method, x_scale, verbose, stoptol,
 
     result = pdfo(fun, x0=x0, constraints=constraint_wrapped, options=options)
 
-    return result
+    return result'''
 
 
 
