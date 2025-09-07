@@ -1,0 +1,134 @@
+Using device: CPU, with 5.95 GB available memory
+Building objective: aspect ratio
+Precomputing transforms
+Timer: Precomputing transforms = 759 ms
+Building objective: force
+Precomputing transforms
+Timer: Precomputing transforms = 796 ms
+Building objective: QS two-term
+Precomputing transforms
+Timer: Precomputing transforms = 642 ms
+Timer: Objective build = 2.78 sec
+Building objective: lcfs R
+Building objective: lcfs Z
+Building objective: fix mode R
+Building objective: fix mode Z
+Building objective: fixed pressure
+Building objective: fixed Psi
+Building objective: fixed current
+Building objective: self_consistency R
+Building objective: self_consistency Z
+Building objective: lambda gauge
+Building objective: axis R self consistency
+Building objective: axis Z self consistency
+Timer: Objective build = 1.14 sec
+Timer: LinearConstraintProjection build = 4.13 sec
+Number of parameters: 312
+Number of objectives: 6700
+Timer: Initializing the optimization = 8.09 sec
+
+Starting optimization
+Using method: Turbo1
+Using dtype = torch.float64 
+Using device = cpu
+Starting from fbest = 22.62
+674) New best: 20.67
+724) New best: 16.55
+774) New best: 11.41
+824) New best: 9.117
+874) New best: 8.045
+924) New best: 6.948
+974) New best: 6.73
+1024) New best: 5.379
+1074) New best: 5.206
+1124) New best: 5.186
+1174) New best: 5.128
+1224) New best: 4.7
+1274) New best: 4.663
+1324) New best: 4.441
+1374) New best: 4.229
+1424) New best: 4.101
+1474) New best: 4.059
+1524) New best: 4.018
+1574) New best: 3.801
+1624) New best: 2.665
+1674) New best: 2.568
+1724) New best: 2.492
+1774) New best: 2.449
+1824) New best: 2.342
+1874) New best: 2.287
+1924) New best: 2.258
+1974) New best: 2.158
+2024) New best: 1.214
+2074) New best: 1.131
+2124) New best: 1.085
+2174) New best: 1.055
+2224) New best: 1.041
+2274) New best: 1.002
+2324) New best: 0.9908
+2374) New best: 0.978
+2424) New best: 0.9412
+2474) New best: 0.9229
+2524) New best: 0.9056
+2574) New best: 0.9038
+2624) New best: 0.8786
+2674) New best: 0.8755
+2724) New best: 0.8666
+2774) New best: 0.8398
+2824) New best: 0.8384
+2874) New best: 0.8303
+2924) New best: 0.8276
+2974) New best: 0.8206
+3074) New best: 0.8157
+3124) New best: 0.8078
+3174) New best: 0.806
+3224) New best: 0.8007
+3274) New best: 0.7998
+3324) New best: 0.7908
+3374) New best: 0.7853
+3424) New best: 0.783
+3474) New best: 0.7794
+3524) New best: 0.7308
+3574) New best: 0.7283
+3624) New best: 0.7115
+3674) New best: 0.7003
+3724) New best: 0.6981
+3774) New best: 0.6875
+3824) New best: 0.6835
+3874) New best: 0.6824
+3974) New best: 0.6779
+4024) New best: 0.6765
+4074) New best: 0.6719
+4124) New best: 0.6709
+4174) New best: 0.6705
+4224) New best: 0.6679
+4324) New best: 0.6671
+4374) New best: 0.6645
+4424) New best: 0.6638
+4474) New best: 0.6436
+4524) New best: 0.6428
+4574) New best: 0.6393
+4624) New best: 0.6388
+4674) New best: 0.6382
+4774) New best: 0.6363
+4924) New best: 0.6352
+4974) New best: 0.6258
+5024) New best: 0.6244
+5074) New best: 0.6235
+5124) New best: 0.6233
+5174) New best: 0.6212
+5224) New best: 0.618
+5274) New best: 0.6129
+5324) New best: 0.6126
+5374) New best: 0.608
+5424) New best: 0.6056
+5474) New best: 0.6054
+5624) New best: 0.595
+5674) New best: 0.5936
+5724) New best: 0.5932
+5774) New best: 0.5925
+5824) New best: 0.5915
+5874) New best: 0.5906
+5974) New best: 0.59
+6024) New best: 0.585
+6074) New best: 0.5842

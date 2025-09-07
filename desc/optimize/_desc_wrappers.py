@@ -523,8 +523,15 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
         options["training_steps"] = 50
     if "box_size" not in options:
         options["box_size"] = 0.2
-    if "max_iter" not in stoptol:
-        stoptol["max_iter"] = 500
+    
+    if "max_evals" not in options:
+        options["max_evals"] = -1
+    if "objective_tol" not in options:
+        options["objective_tol"] = -1
+    if "improvement_tol" not in options:
+        options["improvement_tol"] = -1
+    if "max_time" not in options:
+        options["max_time"] = -1
 
     fun = objective.compute_scalar
     # fun = objective.compute_scaled_error
@@ -562,12 +569,19 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     # print("scale", scale)
     #print("lb", lb)
     #print("ub", ub)
+
+    
+    n_init = 2*lenObj
+    
     turbo1 = Turbo1(f = fun,
                     lb = lb, #constraint.bounds_scaled[0],
                     ub = ub, #constraint.bounds_scaled[1],
                     # scale=scale,
-                    n_init = 2*lenObj,
-                    max_evals = stoptol["maxiter"] + lenObj,
+                    n_init = n_init,
+                    max_evals = options["max_evals"],
+                    objective_tol = options["objective_tol"],
+                    improvement_tol = options["improvement_tol"],
+                    max_time = options["max_time"],
                     batch_size = options["batch_size"],
                     verbose = verbose > 0,
                     use_ard = options["use_ard"],
@@ -581,18 +595,23 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     turbo1.optimize()
     X = turbo1.X
     fX = turbo1.fX
-    ind_best = np.argmin(fX)
-    f_best, x_best = fX[ind_best], X[ind_best, :]
-    #print("f_best", f_best)
-    #print("fun(x_best)", fun(x_best), "x_best.shape", x_best.shape)    
+    bestX = turbo1.bestX
+    bestfX = turbo1.bestfX
+    ind_best = np.argmin(bestfX)
+    f_best, x_best = bestfX[ind_best], bestX[ind_best, :]
+    f_init, x_init = bestfX[0, 0], bestX[0, :]
     
     result = OptimizeResult()
     result.success = True
     result.x = x_best
+    result.eqparams = objective.unpack_state(x_best, False)
     result.fun = f_best
     result.allx = X
+    result.all_eqparams = [objective.unpack_state(x, False) for x in X]
     result.allfun = fX
     result.nfev = turbo1.n_evals
+    result.eqparams_init = objective.unpack_state(x_init, False)
+    result.f_init = f_init
 
     return result
 
