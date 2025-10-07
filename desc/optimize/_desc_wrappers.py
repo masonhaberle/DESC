@@ -496,127 +496,7 @@ def _optimize_pdfo(objective, constraint, x0, method, x_scale, verbose, stoptol,
     return result'''
 
 
-
-@register_optimizer(
-    name="Turbo1",
-    description="Trust Region Bayesian Optimizer, 1 Trust Region",
-    scalar=True,
-    equality_constraints=True,
-    inequality_constraints=True,
-    hessian=False,
-    stochastic=True,
-    GPU=False
-)
-def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stoptol, options=None):
-    '''
-    Wrapper for TuRBO-1 global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
-    '''
-
-    options = {} if options is None else options
-    if "batch_size" not in options:
-        options["batch_size"] = 10
-    if "use_ard" not in options:
-        options["use_ard"] = True
-    if "cholesky_size" not in options:
-        options["cholesky_size"] = 2000
-    if "training_steps" not in options:
-        options["training_steps"] = 50
-    if "box_size" not in options:
-        options["box_size"] = 0.2
-    
-    if "max_evals" not in options:
-        options["max_evals"] = -1
-    if "objective_tol" not in options:
-        options["objective_tol"] = -1
-    if "improvement_tol" not in options:
-        options["improvement_tol"] = -1
-    if "max_time" not in options:
-        options["max_time"] = -1
-
-    fun = objective.compute_scalar
-    # fun = objective.compute_scaled_error
-    #print(inspect.getargspec(fun))
-    lenObj = len(objective.x())
-
-    x0array = np.array(x0)
-    # Adaptive bounds using Hessian scale
-    # try:
-    # J = objective.jac_scaled_error(x0)
-    H = objective.hess(x0)
-    scale, _ = compute_hess_scale(H)
-    # scale, _ = compute_jac_scale(J)
-
-    # except Exception:
-    #     scale = np.abs(x0array) + 1e-8  # fallback if Hessian fails
-    # x0array = x0array / scale
-    boxsize = options["box_size"]
-    # min_scale = 1e-12
-    # lb = np.array(x0array - boxsize * np.maximum(scale, min_scale))
-    # ub = np.array(x0array + boxsize * np.maximum(scale, min_scale))
-    # ub = np.ones(lenObj) * x0array + min_scale
-    # lb = np.ones(lenObj) * x0array - min_scale
-    # inds = np.where(np.abs(x0array) > 1e-6)
-    # ub[inds] = x0array[inds] + 1e-2
-    # lb[inds] = x0array[inds] - 1e-2
-
-    ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
-    lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
-    # If you have Hessian H and domain bounds (ub - lb)
-    # hessian_scales = 1.0 / np.sqrt(np.abs(np.diag(H)))  # Your current approach
-    # domain_scales = (ub - lb) / 10
-    # scale = np.minimum(scale, domain_scales)
-    #print("ub - lb", np.max(ub - lb), np.min(ub - lb), np.mean(ub - lb))
-    # print("scale", scale)
-    #print("lb", lb)
-    #print("ub", ub)
-
-    
-    n_init = 2*lenObj
-    
-    turbo1 = Turbo1(f = fun,
-                    lb = lb, #constraint.bounds_scaled[0],
-                    ub = ub, #constraint.bounds_scaled[1],
-                    # scale=scale,
-                    n_init = n_init,
-                    max_evals = options["max_evals"],
-                    objective_tol = options["objective_tol"],
-                    improvement_tol = options["improvement_tol"],
-                    max_time = options["max_time"],
-                    batch_size = options["batch_size"],
-                    verbose = verbose > 0,
-                    use_ard = options["use_ard"],
-                    max_cholesky_size = options["cholesky_size"],
-                    n_training_steps = options["training_steps"],
-                    min_cuda = 1024,
-                    device = "cpu",
-                    dtype = "float64",
-                    # initial_lengthscales=scale
-                   )
-    turbo1.optimize()
-    X = turbo1.X
-    fX = turbo1.fX
-    bestX = turbo1.bestX
-    bestfX = turbo1.bestfX
-    ind_best = np.argmin(bestfX)
-    f_best, x_best = bestfX[ind_best], bestX[ind_best, :]
-    f_init, x_init = bestfX[0, 0], bestX[0, :]
-    
-    result = OptimizeResult()
-    result.success = True
-    result.x = x_best
-    result.eqparams = objective.unpack_state(x_best, False)
-    result.fun = f_best
-    result.allx = X
-    result.all_eqparams = [objective.unpack_state(x, False) for x in X]
-    result.allfun = fX
-    result.nfev = turbo1.n_evals
-    result.eqparams_init = objective.unpack_state(x_init, False)
-    result.f_init = f_init
-
-    return result
-
-    
-
+'''
 @register_optimizer(
     name="DTurbo1",
     description="Trust Region Bayesian Optimizer, 1 Trust Region",
@@ -628,9 +508,9 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     GPU=False
 )
 def _optimize_DTurbo1(objective, constraint, x0, method, x_scale, verbose, stoptol, options=None):
-    '''
-    Wrapper for TuRBO-1 global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
-    '''
+'''
+    #Wrapper for TuRBO-1 global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
+'''
 
     options = {} if options is None else options
     if "batch_size" not in options:
@@ -707,9 +587,9 @@ def _optimize_DTurbo1(objective, constraint, x0, method, x_scale, verbose, stopt
     result.allfun = fX
     result.nfev = turbo1.n_evals
 
-    return result
+    return result'''
 
-
+'''
 @register_optimizer(
     name="TurboM",
     description="Trust Region Bayesian Optimizer, M Trust Regions",
@@ -721,9 +601,9 @@ def _optimize_DTurbo1(objective, constraint, x0, method, x_scale, verbose, stopt
     GPU=False
 )
 def _optimize_TurboM(objective, constraint, x0, method, x_scale, verbose, stoptol, options=None):
-    '''
-    Wrapper for TuRBO-M global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
-    '''
+'''
+    #Wrapper for TuRBO-M global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
+'''
 
     
     options = {} if options is None else options
@@ -748,7 +628,10 @@ def _optimize_TurboM(objective, constraint, x0, method, x_scale, verbose, stopto
     lenObj = len(objective.x())
 
     x0array = np.array(x0)
+    print(np.round(np.log10(x0array)))
     boxsize = options["box_size"]
+    
+    
     ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
     lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
     
@@ -781,4 +664,132 @@ def _optimize_TurboM(objective, constraint, x0, method, x_scale, verbose, stopto
     result.allfun = fX
     result.nfev = turboM.n_evals
 
+    return result'''
+
+
+@register_optimizer(
+    name="Turbo1",
+    description="Trust Region Bayesian Optimizer, 1 Trust Region",
+    scalar=True,
+    equality_constraints=True,
+    inequality_constraints=True,
+    hessian=False,
+    stochastic=True,
+    GPU=False
+)
+def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stoptol, options=None):
+    '''
+    Wrapper for TuRBO-1 global optimizer.  Does not accept nonlinear constraints, only bounding boxes.
+    '''
+
+    options = {} if options is None else options
+    if "batch_size" not in options:
+        options["batch_size"] = 10
+    if "use_ard" not in options:
+        options["use_ard"] = True
+    if "cholesky_size" not in options:
+        options["cholesky_size"] = 2000
+    if "training_steps" not in options:
+        options["training_steps"] = 50
+    if "box_size" not in options:
+        options["box_size"] = 0.2
+    
+    if "max_evals" not in options:
+        options["max_evals"] = -1
+    if "objective_tol" not in options:
+        options["objective_tol"] = -1
+    if "improvement_tol" not in options:
+        options["improvement_tol"] = -1
+    if "max_time" not in options:
+        options["max_time"] = -1
+
+    fun = objective.compute_scalar
+
+    #def fun(x):
+    #    print(objective.unpack_state(x, False)[0]['Rb_lmn'])
+    #    return objective.compute_scalar(x)
+    # fun = objective.compute_scaled_error
+    #print(inspect.getargspec(fun))
+    lenObj = len(objective.x())
+
+    x0array = np.array(x0)
+    # Adaptive bounds using Hessian scale
+    # try:
+    # J = objective.jac_scaled_error(x0)
+    H = objective.hess(x0)
+    scale, _ = compute_hess_scale(H)
+    # scale, _ = compute_jac_scale(J)
+
+    # except Exception:
+    #     scale = np.abs(x0array) + 1e-8  # fallback if Hessian fails
+    # x0array = x0array / scale
+    boxsize = options["box_size"]
+
+    #print(np.round(np.log10(np.abs(x0array))))
+    
+    # min_scale = 1e-12
+    # lb = np.array(x0array - boxsize * np.maximum(scale, min_scale))
+    # ub = np.array(x0array + boxsize * np.maximum(scale, min_scale))
+    # ub = np.ones(lenObj) * x0array + min_scale
+    # lb = np.ones(lenObj) * x0array - min_scale
+    # inds = np.where(np.abs(x0array) > 1e-6)
+    # ub[inds] = x0array[inds] + 1e-2
+    # lb[inds] = x0array[inds] - 1e-2
+
+    ub = np.maximum((1 + boxsize) * x0array, (1 - boxsize) * x0array) + 1e-12 * np.ones(lenObj)
+    lb = np.minimum((1 + boxsize) * x0array, (1 - boxsize) * x0array) - 1e-12 * np.ones(lenObj)
+    # If you have Hessian H and domain bounds (ub - lb)
+    # hessian_scales = 1.0 / np.sqrt(np.abs(np.diag(H)))  # Your current approach
+    # domain_scales = (ub - lb) / 10
+    # scale = np.minimum(scale, domain_scales)
+    #print("ub - lb", np.max(ub - lb), np.min(ub - lb), np.mean(ub - lb))
+    # print("scale", scale)
+    #print("lb", lb)
+    #print("ub", ub)
+
+    
+    n_init = 2*lenObj
+    
+    turbo1 = Turbo1(f = fun,
+                    lb = lb, #constraint.bounds_scaled[0],
+                    ub = ub, #constraint.bounds_scaled[1],
+                    # scale=scale,
+                    n_init = n_init,
+                    max_evals = options["max_evals"],
+                    objective_tol = options["objective_tol"],
+                    improvement_tol = options["improvement_tol"],
+                    max_time = options["max_time"],
+                    batch_size = options["batch_size"],
+                    verbose = verbose > 0,
+                    use_ard = options["use_ard"],
+                    max_cholesky_size = options["cholesky_size"],
+                    n_training_steps = options["training_steps"],
+                    min_cuda = 1024,
+                    device = "cpu",
+                    dtype = "float64",
+                    # initial_lengthscales=scale
+                   )
+    turbo1.optimize()
+    X = turbo1.X
+    fX = turbo1.fX
+    bestX = turbo1.bestX
+    bestfX = turbo1.bestfX
+    ind_best = np.argmin(bestfX)
+    f_best, x_best = bestfX[ind_best], bestX[ind_best, :]
+    f_init, x_init = bestfX[0, 0], bestX[0, :]
+    
+    result = OptimizeResult()
+    result.success = True
+    result.x = x_best
+    result.eqparams = objective.unpack_state(x_best, False)
+    result.fun = f_best
+    result.allx = X
+    result.all_eqparams = [objective.unpack_state(x, False) for x in X]
+    result.allfun = fX
+    result.nfev = turbo1.n_evals
+    result.eqparams_init = objective.unpack_state(x_init, False)
+    result.f_init = f_init
+
     return result
+
+    
