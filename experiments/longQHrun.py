@@ -39,6 +39,7 @@ max_time = int(sys.argv[1])
 box_size = float(sys.argv[2])
 maxMode = int(sys.argv[3])
 
+print(max_time)
 
 eq_fam = desc.io.load("inputs/lpQH.h5")
 eq_init = eq_fam[-1]
@@ -92,18 +93,23 @@ global_eq_qs, result = eq_qs.optimize(
     options={"max_time":max_time, "trust_regions":1, "box_size":box_size, "training_steps": 20, "batch_size":30}
 )
 
+eq_outputs = []
+for output in result.progress:
+    eq_output = global_eq_qs.copy()
+    eq_output.params_dict = output[1]
+    eq_outputs.append(eq_output)
+
 outputname = "Output_T" + sys.argv[1] + "_B" + sys.argv[2] + "_M" + sys.argv[3]
 try:
     os.mkdir(outputname)
 except(OSError):
     print("Output dir already exists, overwriting")
 
-
 global_eq_qs.save(outputname+"/eq_result.h5")
 
-eq_qs.params_dict = result.eqparams_init[0]
-eq_qs.save(outputname+"/eq_init.h5")
+for i in range(len(eq_outputs)):
+    eq_outputs[i].save(outputname+"/eq_output_" + str(i) + ".h5")
 
 with open(outputname+"/obj_history.txt", "w") as obj_history:
-    for item in result.allfun:
+    for item in result.bestfuns:
         obj_history.write(f"{item[0]:.5f}\n")

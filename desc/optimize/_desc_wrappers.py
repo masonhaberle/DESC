@@ -776,19 +776,25 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     bestfX = turbo1.bestfX
     ind_best = np.argmin(bestfX)
     f_best, x_best = bestfX[ind_best], bestX[ind_best, :]
-    f_init, x_init = bestfX[0, 0], bestX[0, :]
+
+    num_outputs = 8
+    #X Progress array, stored as (Batch number, Equilibrium Parameters, Original state, Objective value)
+    progress = [(i, objective.unpack_state(bestX[i, :], False)[0], bestX[i, :], bestfX[i, 0]) for i in range(0, len(bestX), int(np.ceil(len(bestX)/(num_outputs - 1))))]
+    #progress.append((len(bestX), objective.unpack_state(x_best, False)[0], x_best, f_best))
+    X = np.append(X, [x_best], axis=0)
+    fX = np.append(fX, [f_best], axis=0)
     
     result = OptimizeResult()
     result.success = True
     result.x = x_best
-    result.eqparams = objective.unpack_state(x_best, False)
+    result.eqparams = objective.unpack_state(x_best, False)[0]
     result.fun = f_best
     result.allx = X
-    result.all_eqparams = [objective.unpack_state(x, False) for x in X]
+    #result.all_eqparams = [objective.unpack_state(x, False) for x in X]
     result.allfun = fX
+    result.bestfuns = bestfX
+    result.progress = progress
     result.nfev = turbo1.n_evals
-    result.eqparams_init = objective.unpack_state(x_init, False)
-    result.f_init = f_init
 
     return result
 
