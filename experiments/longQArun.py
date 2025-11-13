@@ -41,7 +41,7 @@ maxMode = int(sys.argv[3])
 
 print(max_time)
 
-eq_fam = desc.io.load("DESC/experiments/inputs/lpQH.h5")
+eq_fam = desc.io.load("DESC/experiments/inputs/lpQA.h5")
 eq_init = eq_fam[-1]
 eq_qs = eq_init.copy()
 
