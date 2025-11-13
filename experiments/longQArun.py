@@ -41,7 +41,7 @@ maxMode = int(sys.argv[3])
 
 print(max_time)
 
-eq_fam = desc.io.load("DESC/experiments/inputs/lpQA.h5")
+eq_fam = desc.io.load("DESC/experiments/inputs/precise_QA.h5")
 eq_init = eq_fam[-1]
 eq_qs = eq_init.copy()
 
@@ -68,10 +68,10 @@ fixed_R_modes_int = eq_qs.R_basis.modes[np.max(np.abs(eq_qs.R_basis.modes), 1) >
 fixed_Z_modes_int = eq_qs.Z_basis.modes[np.max(np.abs(eq_qs.Z_basis.modes), 1) > maxModeInt, :]
 
 objective_f = ObjectiveFunction((
-    AspectRatio(eq=eq_qs, target=8, weight=10),
+    AspectRatio(eq=eq_qs, target=6, weight=10),
     ForceBalance(eq=eq_qs, weight=1),
-    QuasisymmetryTwoTerm(eq=eq_qs, grid=grid_vol, helicity=(1, eq_qs.NFP), weight=1),
-    RotationalTransform(eq=eq_qs, grid=grid_vol, target=1.24, weight=10)
+    QuasisymmetryTwoTerm(eq=eq_qs, grid=grid_vol, helicity=(1, 0), weight=1),
+    RotationalTransform(eq=eq_qs, grid=grid_vol, target=0.42, weight=10)
 ))
 
 constraints = (
@@ -90,7 +90,7 @@ global_eq_qs, result = eq_qs.optimize(
     optimizer=optimizer,
     copy=True,
     verbose=1,
-    options={"max_time":max_time, "trust_regions":1, "box_size":box_size, "training_steps": 20, "batch_size":30}
+    options={"max_time":max_time, "trust_regions":1, "box_size":box_size, "training_steps": 30, "batch_size":50}
 )
 
 eq_outputs = []
@@ -99,7 +99,7 @@ for output in result.progress:
     eq_output.params_dict = output[1]
     eq_outputs.append(eq_output)
 
-outputname = "Output_T" + sys.argv[1] + "_B" + sys.argv[2] + "_M" + sys.argv[3]
+outputname = "QA_Output_T" + sys.argv[1] + "_B" + sys.argv[2] + "_M" + sys.argv[3]
 try:
     os.mkdir(outputname)
 except(OSError):

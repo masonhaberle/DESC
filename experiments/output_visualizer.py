@@ -18,11 +18,7 @@ from desc.plotting import (
     plot_3d
 )
 
-max_time = int(sys.argv[1])
-box_size = float(sys.argv[2])
-maxMode = int(sys.argv[3])
-
-folder = "Output_T" + sys.argv[1] + "_B" + sys.argv[2] + "_M" + sys.argv[3]
+folder = sys.argv[1]
 path = os.path.join(folder, "eq_result.h5")
 eq = desc.io.load(path)
 
@@ -59,6 +55,9 @@ with open(path) as obj_history:
 
 plt.figure("Result Objective")
 fig = plt.plot(objectives)
+plt.xlabel("Iterations")
+plt.ylabel("Objective Value")
+plt.title("Optimization Progress")
 plt.savefig(folder + "/result_obj.png")
 
 
