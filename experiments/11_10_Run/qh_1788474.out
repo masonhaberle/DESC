@@ -1,0 +1,134 @@
+Using device: CPU, with 2298.00 GB available memory
+/ext3/py312/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+36000
+/scratch/projects/kaptanoglulab/MH/DESC/desc/utils.py:572: UserWarning: Reducing radial (L) resolution can make plasma boundary inconsistent. Recommend calling `eq.surface = eq.get_surface_at(rho=1.0)`
+  warnings.warn(msg, err)
+/scratch/projects/kaptanoglulab/MH/DESC/desc/utils.py:572: UserWarning: Detected no equilibrium constraints passed, equilibrium optimization problems usually require equilibrium constraints in order to produce meaningful, physical results. Consider adding `ForceBalance` as a constraint.
+  warnings.warn(msg, err)
+Building objective: aspect ratio
+Precomputing transforms
+Building objective: force
+Precomputing transforms
+Building objective: QS two-term
+Precomputing transforms
+Building objective: rotational transform
+Precomputing transforms
+Building objective: lcfs R
+Building objective: lcfs Z
+Building objective: fix mode R
+Building objective: fix mode Z
+Building objective: fixed pressure
+Building objective: fixed Psi
+Building objective: fixed current
+Building objective: self_consistency R
+Building objective: self_consistency Z
+Building objective: lambda gauge
+Building objective: axis R self consistency
+Building objective: axis Z self consistency
+Number of parameters: 333
+Number of objectives: 9185
+
+Starting optimization
+Using method: Turbo1
+Using dtype = torch.float64 
+Using device = cpu
+Starting from fbest = 4.958e+18
+696) New best: 1.355e+17
+726) New best: 1.232e+17
+786) New best: 9.067e+16
+816) New best: 9.043e+16
+876) New best: 4.906e+16
+936) New best: 9.723e+15
+966) New best: 9.723e+15
+996) New best: 9.484e+15
+1026) New best: 8.953e+15
+1116) New best: 3.943e+15
+1146) New best: 3.055e+15
+1176) New best: 3.001e+15
+1206) New best: 2.996e+15
+1236) New best: 2.995e+15
+1326) New best: 2.948e+15
+1506) New best: 2.948e+15
+1536) New best: 2.947e+15
+1566) New best: 2.712e+15
+1596) New best: 9.892e+14
+1656) New best: 9.882e+14
+1716) New best: 9.562e+14
+1746) New best: 9.483e+14
+1776) New best: 5.235e+14
+1806) New best: 4.996e+14
+1836) New best: 4.37e+14
+1866) New best: 4.078e+14
+1896) New best: 3.4e+14
+1926) New best: 3.196e+14
+1956) New best: 3.171e+14
+1986) New best: 1.032e+14
+2016) New best: 1.013e+14
+2076) New best: 1.003e+14
+2106) New best: 1.001e+14
+2136) New best: 9.845e+13
+2166) New best: 9.257e+13
+2316) New best: 9.234e+13
+2346) New best: 9.095e+13
+2376) New best: 8.21e+13
+2406) New best: 8.209e+13
+2436) New best: 8.105e+13
+2466) New best: 7.978e+13
+2526) New best: 4.355e+13
+2586) New best: 4.245e+13
+2646) New best: 3.96e+13
+2676) New best: 3.951e+13
+2796) New best: 3.908e+13
+2916) New best: 2.907e+13
+2976) New best: 2.906e+13
+3006) New best: 2.894e+13
+3036) New best: 2.775e+13
+3216) New best: 2.726e+13
+3336) New best: 2.676e+13
+3456) New best: 2.648e+13
+3516) New best: 2.625e+13
+3606) New best: 2.562e+13
+3726) New best: 2.543e+13
+3786) New best: 2.542e+13
+3816) New best: 2.238e+13
+3906) New best: 2.228e+13
+4026) New best: 2.142e+13
+4296) New best: 2.108e+13
+4326) New best: 2.081e+13
+4356) New best: 2.057e+13
+4386) New best: 1.942e+13
+4476) New best: 1.486e+13
+4506) New best: 1.485e+13
+4566) New best: 1.483e+13
+4836) New best: 1.477e+13
+Stop condition met: Ran for total time 3.616e+04
+Stop condition met: Ran for total time 3.616e+04
+==============================================================================================================
+                                                                 Start  -->   End
+Total (sum of squares):                                      1.142e-02  -->   1.477e+13, 
+Aspect ratio:                                                8.000e+00  -->   1.195e+00 (dimensionless)
+Maximum absolute Force error:                                1.045e+02  -->   9.057e+11 (N)
+Minimum absolute Force error:                                6.677e-04  -->   4.221e+00 (N)
+Average absolute Force error:                                3.453e+00  -->   5.710e+08 (N)
+Maximum absolute Force error:                                1.404e-04  -->   1.217e+06 (normalized)
+Minimum absolute Force error:                                8.968e-10  -->   5.670e-06 (normalized)
+Average absolute Force error:                                4.638e-06  -->   7.669e+02 (normalized)
+Maximum absolute Quasi-symmetry (1,4) two-term error:        1.556e-02  -->   3.720e+06 (T^3)
+Minimum absolute Quasi-symmetry (1,4) two-term error:        5.706e-08  -->   7.087e-07 (T^3)
+Average absolute Quasi-symmetry (1,4) two-term error:        1.605e-03  -->   3.398e+03 (T^3)
+Maximum absolute Quasi-symmetry (1,4) two-term error:        2.630e-02  -->   6.289e+06 (normalized)
+Minimum absolute Quasi-symmetry (1,4) two-term error:        9.646e-08  -->   1.198e-06 (normalized)
+Average absolute Quasi-symmetry (1,4) two-term error:        2.714e-03  -->   5.745e+03 (normalized)
+Maximum Rotational transform:                                1.246e+00  -->   1.703e+01 (dimensionless)
+Minimum Rotational transform:                                1.232e+00  -->  -4.573e-01 (dimensionless)
+Average Rotational transform:                                1.239e+00  -->   2.921e+00 (dimensionless)
+R boundary error:                                            0.000e+00  -->   2.286e-19 (m)
+Z boundary error:                                            0.000e+00  -->   2.393e-19 (m)
+Fixed-R modes error:                                         0.000e+00  -->   6.560e-19 (m)
+Fixed-Z modes error:                                         0.000e+00  -->   7.811e-19 (m)
+Fixed pressure profile error:                                0.000e+00  -->   0.000e+00 (Pa)
+Fixed Psi error:                                             0.000e+00  -->   0.000e+00 (Wb)
+Fixed current profile error:                                 0.000e+00  -->   0.000e+00 (A)
+==============================================================================================================
+

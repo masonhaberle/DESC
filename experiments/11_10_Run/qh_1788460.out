@@ -1,0 +1,115 @@
+Using device: CPU, with 2298.00 GB available memory
+/ext3/py312/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+36000
+/scratch/projects/kaptanoglulab/MH/DESC/desc/utils.py:572: UserWarning: Reducing radial (L) resolution can make plasma boundary inconsistent. Recommend calling `eq.surface = eq.get_surface_at(rho=1.0)`
+  warnings.warn(msg, err)
+/scratch/projects/kaptanoglulab/MH/DESC/desc/utils.py:572: UserWarning: Detected no equilibrium constraints passed, equilibrium optimization problems usually require equilibrium constraints in order to produce meaningful, physical results. Consider adding `ForceBalance` as a constraint.
+  warnings.warn(msg, err)
+Building objective: aspect ratio
+Precomputing transforms
+Building objective: force
+Precomputing transforms
+Building objective: QS two-term
+Precomputing transforms
+Building objective: rotational transform
+Precomputing transforms
+Building objective: lcfs R
+Building objective: lcfs Z
+Building objective: fix mode R
+Building objective: fix mode Z
+Building objective: fixed pressure
+Building objective: fixed Psi
+Building objective: fixed current
+Building objective: self_consistency R
+Building objective: self_consistency Z
+Building objective: lambda gauge
+Building objective: axis R self consistency
+Building objective: axis Z self consistency
+Number of parameters: 373
+Number of objectives: 9185
+
+Starting optimization
+Using method: Turbo1
+Using dtype = torch.float64 
+Using device = cpu
+Starting from fbest = 8.029e+03
+866) New best: 6.244e+03
+896) New best: 4.078e+03
+956) New best: 3.167e+03
+1496) New best: 2.13e+03
+1526) New best: 1.221e+03
+1556) New best: 1.142e+03
+1586) New best: 985.0
+1616) New best: 890.1
+1646) New best: 710.1
+1676) New best: 687.1
+1826) New best: 665.3
+1856) New best: 660.1
+1916) New best: 589.7
+1946) New best: 515.0
+1976) New best: 480.9
+2006) New best: 445.6
+2096) New best: 423.5
+2126) New best: 382.5
+2156) New best: 380.0
+2186) New best: 368.1
+2216) New best: 359.9
+2246) New best: 356.5
+2276) New best: 355.4
+2306) New best: 344.1
+2336) New best: 336.8
+2396) New best: 322.7
+2456) New best: 320.3
+2486) New best: 300.9
+2516) New best: 295.3
+2546) New best: 269.5
+2666) New best: 267.0
+2696) New best: 252.8
+2726) New best: 249.6
+2786) New best: 243.0
+2816) New best: 229.5
+2846) New best: 225.2
+2906) New best: 219.7
+2936) New best: 210.4
+2996) New best: 209.0
+3086) New best: 203.1
+3206) New best: 198.3
+3476) New best: 195.9
+3716) New best: 193.9
+3806) New best: 190.1
+3866) New best: 187.8
+4016) New best: 186.8
+4226) New best: 184.4
+4316) New best: 182.4
+4586) New best: 173.1
+Stop condition met: Ran for total time 3.646e+04
+Stop condition met: Ran for total time 3.646e+04
+==============================================================================================================
+                                                                 Start  -->   End
+Total (sum of squares):                                      1.142e-02  -->   1.731e+02, 
+Aspect ratio:                                                8.000e+00  -->   7.005e+00 (dimensionless)
+Maximum absolute Force error:                                1.045e+02  -->   1.760e+05 (N)
+Minimum absolute Force error:                                6.677e-04  -->   3.945e+00 (N)
+Average absolute Force error:                                3.453e+00  -->   1.038e+04 (N)
+Maximum absolute Force error:                                1.404e-04  -->   2.364e-01 (normalized)
+Minimum absolute Force error:                                8.968e-10  -->   5.299e-06 (normalized)
+Average absolute Force error:                                4.638e-06  -->   1.394e-02 (normalized)
+Maximum absolute Quasi-symmetry (1,4) two-term error:        1.556e-02  -->   2.372e+00 (T^3)
+Minimum absolute Quasi-symmetry (1,4) two-term error:        5.706e-08  -->   6.128e-05 (T^3)
+Average absolute Quasi-symmetry (1,4) two-term error:        1.605e-03  -->   1.677e-01 (T^3)
+Maximum absolute Quasi-symmetry (1,4) two-term error:        2.630e-02  -->   4.011e+00 (normalized)
+Minimum absolute Quasi-symmetry (1,4) two-term error:        9.646e-08  -->   1.036e-04 (normalized)
+Average absolute Quasi-symmetry (1,4) two-term error:        2.714e-03  -->   2.835e-01 (normalized)
+Maximum Rotational transform:                                1.246e+00  -->   8.377e-01 (dimensionless)
+Minimum Rotational transform:                                1.232e+00  -->   8.054e-01 (dimensionless)
+Average Rotational transform:                                1.239e+00  -->   8.229e-01 (dimensionless)
+R boundary error:                                            0.000e+00  -->   6.979e-20 (m)
+Z boundary error:                                            0.000e+00  -->   8.546e-20 (m)
+Fixed-R modes error:                                         0.000e+00  -->   2.060e-19 (m)
+Fixed-Z modes error:                                         0.000e+00  -->   1.487e-19 (m)
+Fixed pressure profile error:                                0.000e+00  -->   0.000e+00 (Pa)
+Fixed Psi error:                                             0.000e+00  -->   0.000e+00 (Wb)
+Fixed current profile error:                                 0.000e+00  -->   0.000e+00 (A)
+==============================================================================================================
+

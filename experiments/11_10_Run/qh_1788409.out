@@ -1,0 +1,139 @@
+Using device: CPU, with 2628.18 GB available memory
+/ext3/py312/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+36000
+/scratch/projects/kaptanoglulab/MH/DESC/desc/utils.py:572: UserWarning: Reducing radial (L) resolution can make plasma boundary inconsistent. Recommend calling `eq.surface = eq.get_surface_at(rho=1.0)`
+  warnings.warn(msg, err)
+/scratch/projects/kaptanoglulab/MH/DESC/desc/utils.py:572: UserWarning: Detected no equilibrium constraints passed, equilibrium optimization problems usually require equilibrium constraints in order to produce meaningful, physical results. Consider adding `ForceBalance` as a constraint.
+  warnings.warn(msg, err)
+Building objective: aspect ratio
+Precomputing transforms
+Building objective: force
+Precomputing transforms
+Building objective: QS two-term
+Precomputing transforms
+Building objective: rotational transform
+Precomputing transforms
+Building objective: lcfs R
+Building objective: lcfs Z
+Building objective: fix mode R
+Building objective: fix mode Z
+Building objective: fixed pressure
+Building objective: fixed Psi
+Building objective: fixed current
+Building objective: self_consistency R
+Building objective: self_consistency Z
+Building objective: lambda gauge
+Building objective: axis R self consistency
+Building objective: axis Z self consistency
+Number of parameters: 333
+Number of objectives: 9185
+
+Starting optimization
+Using method: Turbo1
+Using dtype = torch.float64 
+Using device = cpu
+Starting from fbest = 1.25e+03
+1356) New best: 391.0
+1416) New best: 342.8
+1476) New best: 338.4
+1536) New best: 338.3
+1596) New best: 252.3
+1746) New best: 232.6
+1776) New best: 205.9
+1806) New best: 198.1
+1836) New best: 190.5
+1866) New best: 175.6
+1896) New best: 167.8
+1926) New best: 156.6
+1956) New best: 155.0
+1986) New best: 150.5
+2016) New best: 148.4
+2046) New best: 144.5
+2076) New best: 138.1
+2106) New best: 132.5
+2136) New best: 131.1
+2166) New best: 130.7
+2196) New best: 125.6
+2226) New best: 118.5
+2256) New best: 113.7
+2286) New best: 109.0
+2316) New best: 107.9
+2346) New best: 107.5
+2406) New best: 106.8
+2496) New best: 106.7
+2526) New best: 105.7
+2556) New best: 82.04
+2586) New best: 79.86
+2616) New best: 76.12
+2646) New best: 74.16
+2676) New best: 73.29
+2706) New best: 72.03
+2736) New best: 71.31
+2766) New best: 71.02
+2796) New best: 69.42
+2826) New best: 63.7
+2856) New best: 61.45
+2886) New best: 60.71
+2916) New best: 59.19
+2946) New best: 57.97
+3006) New best: 57.82
+3036) New best: 56.27
+3066) New best: 56.27
+3096) New best: 56.13
+3126) New best: 54.79
+3186) New best: 54.12
+3246) New best: 52.28
+3276) New best: 51.79
+3306) New best: 49.74
+3366) New best: 49.24
+3396) New best: 48.87
+3486) New best: 48.67
+3516) New best: 48.08
+3636) New best: 47.87
+3786) New best: 47.71
+3816) New best: 47.25
+3846) New best: 46.57
+3876) New best: 46.41
+3996) New best: 45.8
+4026) New best: 45.69
+4056) New best: 44.48
+4146) New best: 44.35
+4206) New best: 44.28
+4326) New best: 43.05
+4356) New best: 42.92
+4446) New best: 41.74
+4536) New best: 40.89
+4566) New best: 40.02
+4596) New best: 39.93
+4656) New best: 39.92
+Stop condition met: Ran for total time 3.652e+04
+Stop condition met: Ran for total time 3.652e+04
+==============================================================================================================
+                                                                 Start  -->   End
+Total (sum of squares):                                      1.142e-02  -->   3.992e+01, 
+Aspect ratio:                                                8.000e+00  -->   7.408e+00 (dimensionless)
+Maximum absolute Force error:                                1.045e+02  -->   2.976e+05 (N)
+Minimum absolute Force error:                                6.677e-04  -->   9.363e-01 (N)
+Average absolute Force error:                                3.453e+00  -->   6.793e+03 (N)
+Maximum absolute Force error:                                1.404e-04  -->   3.997e-01 (normalized)
+Minimum absolute Force error:                                8.968e-10  -->   1.258e-06 (normalized)
+Average absolute Force error:                                4.638e-06  -->   9.125e-03 (normalized)
+Maximum absolute Quasi-symmetry (1,4) two-term error:        1.556e-02  -->   6.639e-01 (T^3)
+Minimum absolute Quasi-symmetry (1,4) two-term error:        5.706e-08  -->   5.811e-06 (T^3)
+Average absolute Quasi-symmetry (1,4) two-term error:        1.605e-03  -->   6.570e-02 (T^3)
+Maximum absolute Quasi-symmetry (1,4) two-term error:        2.630e-02  -->   1.122e+00 (normalized)
+Minimum absolute Quasi-symmetry (1,4) two-term error:        9.646e-08  -->   9.824e-06 (normalized)
+Average absolute Quasi-symmetry (1,4) two-term error:        2.714e-03  -->   1.111e-01 (normalized)
+Maximum Rotational transform:                                1.246e+00  -->   1.060e+00 (dimensionless)
+Minimum Rotational transform:                                1.232e+00  -->   9.275e-01 (dimensionless)
+Average Rotational transform:                                1.239e+00  -->   9.843e-01 (dimensionless)
+R boundary error:                                            0.000e+00  -->   2.286e-19 (m)
+Z boundary error:                                            0.000e+00  -->   2.393e-19 (m)
+Fixed-R modes error:                                         0.000e+00  -->   6.560e-19 (m)
+Fixed-Z modes error:                                         0.000e+00  -->   7.811e-19 (m)
+Fixed pressure profile error:                                0.000e+00  -->   0.000e+00 (Pa)
+Fixed Psi error:                                             0.000e+00  -->   0.000e+00 (Wb)
+Fixed current profile error:                                 0.000e+00  -->   0.000e+00 (A)
+==============================================================================================================
+

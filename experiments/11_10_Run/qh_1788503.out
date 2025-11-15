@@ -1,0 +1,178 @@
+Using device: CPU, with 2854.42 GB available memory
+/ext3/py312/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+36000
+/scratch/projects/kaptanoglulab/MH/DESC/desc/utils.py:572: UserWarning: Reducing radial (L) resolution can make plasma boundary inconsistent. Recommend calling `eq.surface = eq.get_surface_at(rho=1.0)`
+  warnings.warn(msg, err)
+/scratch/projects/kaptanoglulab/MH/DESC/desc/utils.py:572: UserWarning: Detected no equilibrium constraints passed, equilibrium optimization problems usually require equilibrium constraints in order to produce meaningful, physical results. Consider adding `ForceBalance` as a constraint.
+  warnings.warn(msg, err)
+Building objective: aspect ratio
+Precomputing transforms
+Building objective: force
+Precomputing transforms
+Building objective: QS two-term
+Precomputing transforms
+Building objective: rotational transform
+Precomputing transforms
+Building objective: lcfs R
+Building objective: lcfs Z
+Building objective: fix mode R
+Building objective: fix mode Z
+Building objective: fixed pressure
+Building objective: fixed Psi
+Building objective: fixed current
+Building objective: self_consistency R
+Building objective: self_consistency Z
+Building objective: lambda gauge
+Building objective: axis R self consistency
+Building objective: axis Z self consistency
+Number of parameters: 312
+Number of objectives: 9185
+
+Starting optimization
+Using method: Turbo1
+Using dtype = torch.float64 
+Using device = cpu
+Starting from fbest = 660.1
+894) New best: 622.3
+924) New best: 480.7
+954) New best: 409.2
+984) New best: 398.2
+1014) New best: 395.6
+1044) New best: 393.5
+1074) New best: 392.1
+1104) New best: 365.1
+1134) New best: 361.8
+1164) New best: 344.5
+1194) New best: 336.5
+1224) New best: 331.7
+1254) New best: 327.1
+1284) New best: 320.1
+1314) New best: 319.4
+1344) New best: 312.7
+1374) New best: 311.6
+1404) New best: 311.0
+1434) New best: 282.8
+1464) New best: 278.1
+1494) New best: 277.2
+1524) New best: 277.1
+1554) New best: 274.5
+1584) New best: 274.3
+1614) New best: 273.7
+1644) New best: 273.4
+1674) New best: 273.2
+1704) New best: 272.9
+1734) New best: 272.5
+1764) New best: 272.3
+1794) New best: 272.3
+1824) New best: 272.1
+1854) New best: 271.7
+1884) New best: 260.2
+1914) New best: 237.7
+1944) New best: 237.4
+1974) New best: 237.1
+2004) New best: 236.1
+2034) New best: 216.6
+2064) New best: 214.6
+2094) New best: 205.2
+2124) New best: 204.9
+2154) New best: 202.7
+2184) New best: 201.7
+2214) New best: 201.5
+2244) New best: 198.1
+2274) New best: 198.0
+2304) New best: 197.3
+2334) New best: 197.1
+2364) New best: 196.7
+2394) New best: 196.5
+2424) New best: 195.6
+2484) New best: 195.2
+2514) New best: 194.8
+2574) New best: 194.3
+2604) New best: 194.1
+2634) New best: 194.0
+2664) New best: 193.7
+2724) New best: 193.0
+2784) New best: 191.7
+2814) New best: 170.6
+2844) New best: 170.5
+2874) New best: 170.1
+2904) New best: 170.1
+2934) New best: 169.8
+2994) New best: 168.4
+3024) New best: 168.2
+3054) New best: 166.6
+3084) New best: 164.5
+3174) New best: 162.0
+3234) New best: 141.9
+3264) New best: 141.7
+3294) New best: 141.5
+3324) New best: 141.3
+3354) New best: 138.0
+3384) New best: 137.8
+3414) New best: 137.6
+3444) New best: 137.5
+3474) New best: 137.5
+3504) New best: 137.2
+3534) New best: 137.2
+3564) New best: 135.7
+3594) New best: 135.7
+3624) New best: 135.4
+3654) New best: 135.3
+3684) New best: 108.1
+3714) New best: 107.3
+3744) New best: 106.9
+3804) New best: 98.9
+3834) New best: 98.64
+3864) New best: 98.58
+3924) New best: 98.23
+3954) New best: 93.03
+3984) New best: 92.7
+4044) New best: 92.56
+4104) New best: 90.89
+4134) New best: 90.72
+4164) New best: 88.58
+4194) New best: 88.0
+4224) New best: 87.96
+4284) New best: 87.65
+4404) New best: 87.42
+4434) New best: 86.6
+4494) New best: 85.97
+4554) New best: 85.97
+4584) New best: 85.33
+4644) New best: 85.0
+4674) New best: 84.67
+4704) New best: 84.47
+4734) New best: 84.15
+4824) New best: 84.07
+5004) New best: 84.03
+Stop condition met: Ran for total time 3.664e+04
+Stop condition met: Ran for total time 3.664e+04
+==============================================================================================================
+                                                                 Start  -->   End
+Total (sum of squares):                                      1.142e-02  -->   8.403e+01, 
+Aspect ratio:                                                8.000e+00  -->   7.352e+00 (dimensionless)
+Maximum absolute Force error:                                1.045e+02  -->   1.916e+05 (N)
+Minimum absolute Force error:                                6.677e-04  -->   2.570e+00 (N)
+Average absolute Force error:                                3.453e+00  -->   8.448e+03 (N)
+Maximum absolute Force error:                                1.404e-04  -->   2.573e-01 (normalized)
+Minimum absolute Force error:                                8.968e-10  -->   3.452e-06 (normalized)
+Average absolute Force error:                                4.638e-06  -->   1.135e-02 (normalized)
+Maximum absolute Quasi-symmetry (1,4) two-term error:        1.556e-02  -->   1.068e+00 (T^3)
+Minimum absolute Quasi-symmetry (1,4) two-term error:        5.706e-08  -->   5.233e-05 (T^3)
+Average absolute Quasi-symmetry (1,4) two-term error:        1.605e-03  -->   7.849e-02 (T^3)
+Maximum absolute Quasi-symmetry (1,4) two-term error:        2.630e-02  -->   1.805e+00 (normalized)
+Minimum absolute Quasi-symmetry (1,4) two-term error:        9.646e-08  -->   8.847e-05 (normalized)
+Average absolute Quasi-symmetry (1,4) two-term error:        2.714e-03  -->   1.327e-01 (normalized)
+Maximum Rotational transform:                                1.246e+00  -->   5.214e-01 (dimensionless)
+Minimum Rotational transform:                                1.232e+00  -->   2.716e-01 (dimensionless)
+Average Rotational transform:                                1.239e+00  -->   4.210e-01 (dimensionless)
+R boundary error:                                            0.000e+00  -->   2.286e-19 (m)
+Z boundary error:                                            0.000e+00  -->   2.393e-19 (m)
+Fixed-R modes error:                                         0.000e+00  -->   1.003e-17 (m)
+Fixed-Z modes error:                                         0.000e+00  -->   6.421e-18 (m)
+Fixed pressure profile error:                                0.000e+00  -->   0.000e+00 (Pa)
+Fixed Psi error:                                             0.000e+00  -->   0.000e+00 (Wb)
+Fixed current profile error:                                 0.000e+00  -->   0.000e+00 (A)
+==============================================================================================================
+
