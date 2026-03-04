@@ -60,4 +60,12 @@ plt.ylabel("Objective Value")
 plt.title("Optimization Progress")
 plt.savefig(folder + "/result_obj.png")
 
+plt.figure("Result Log Objective")
+fig = plt.semilogy(objectives)
+plt.xlabel("Iterations")
+plt.ylabel("Objective Value")
+plt.title("Optimization Progress")
+plt.savefig(folder + "/result_log_obj.png")
+
+
 
