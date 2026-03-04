@@ -12,7 +12,8 @@ from .least_squares import lsqtr
 from .optimizer import register_optimizer
 from .stochastic import sgd
 #from turbo import DTurbo1, Turbo1, TurboM
-from turbo import Turbo1, TurboM
+from .turbo.turbo_1 import Turbo1
+from .turbo.turbo_m import TurboM
 
 import inspect
 
