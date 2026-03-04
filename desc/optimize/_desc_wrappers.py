@@ -750,7 +750,7 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     
     n_init = 2*lenObj
     
-    turbo1 = Turbo1(f = fun,
+    turbo1 = Turbo1(objective = objective,
                     lb = lb, #constraint.bounds_scaled[0],
                     ub = ub, #constraint.bounds_scaled[1],
                     # scale=scale,
@@ -793,6 +793,7 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     #result.all_eqparams = [objective.unpack_state(x, False) for x in X]
     result.allfun = fX
     result.bestfuns = bestfX
+    result.bestObjVector = turbo1.bestObjVector
     result.progress = progress
     result.nfev = turbo1.n_evals
 
