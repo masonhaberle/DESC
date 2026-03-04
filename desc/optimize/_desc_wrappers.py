@@ -794,6 +794,7 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     result.allfun = fX
     result.bestfuns = bestfX
     result.bestObjVector = turbo1.bestObjVector
+    result.objectiveRef = objective.objectives
     result.progress = progress
     result.nfev = turbo1.n_evals
 
