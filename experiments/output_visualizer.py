@@ -39,10 +39,9 @@ plt.figure("Result Boundary")
 plot_boundary(eq)
 plt.savefig(folder + "/result_boundary.png")
 
-plt.figure("Result 3D")
-plot_3d(eq, "|B|")
-plt.savefig(folder + "/result_3d.png")
-
+fig = plot_3d(eq, "|B|")
+fig.write_html(folder + "/result_3d.html")
+pio.write_image(fig, folder + "/result_3d.png")
 
 path = os.path.join(folder, "obj_history.txt")
 objectives = []
