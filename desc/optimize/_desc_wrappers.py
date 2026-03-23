@@ -706,6 +706,7 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
 
     fun = objective.compute_scalar
 
+
     #def fun(x):
     #    print(objective.unpack_state(x, False)[0]['Rb_lmn'])
     #    return objective.compute_scalar(x)
@@ -798,7 +799,9 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     result.objectiveRef = objective.objectives
     result.progress = progress
     result.nfev = turbo1.n_evals
+    
 
     return result
 
     
+

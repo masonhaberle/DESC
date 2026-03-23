@@ -128,7 +128,7 @@ class Turbo1:
         self.fX = np.zeros((0, 1))
         self.bestX = np.zeros((0, self.dim))
         self.bestfX = np.zeros((0, 1))
-        self.bestObjVector = np.zeros((0, objective.dim_f))
+        self.bestObjVector = np.zeros((0, len(objective.objectives)))
 
         # Device and dtype for GPyTorch
         self.min_cuda = min_cuda
@@ -295,7 +295,8 @@ class Turbo1:
             newBestfX = fX_init[newBestInd]
             self.bestX = np.vstack((self.bestX, deepcopy(newBestX)))
             self.bestfX = np.vstack((self.bestfX, deepcopy(newBestfX)))
-            self.bestObjVector = np.vstack((self.bestObjVector, self.objective.compute_scaled_error(newBestX)))
+            newBestObjs = [obj.compute_scalar(params[0]) for obj, params in zip(self.objective.objectives, self.objective.unpack_state(newBestX))]
+            self.bestObjVector = np.vstack((self.bestObjVector, newBestObjs))
             self.f_best = min(self.f_best, newBestfX[0])
             
 
@@ -344,5 +345,5 @@ class Turbo1:
                 self.fX = np.vstack((self.fX, deepcopy(fX_next)))
                 self.bestX = np.vstack((self.bestX, deepcopy(newBestX)))
                 self.bestfX = np.vstack((self.bestfX, deepcopy(newBestfX)))
-                self.bestObjVector = np.vstack((self.bestObjVector, self.objective.compute_scaled_error(newBestX)))
-            
+                newBestObjs = [obj.compute_scalar(params[0]) for obj, params in zip(self.objective.objectives, self.objective.unpack_state(newBestX))]
+                self.bestObjVector = np.vstack((self.bestObjVector, newBestObjs))
