@@ -778,6 +778,7 @@ def _optimize_Turbo1(objective, constraint, x0, method, x_scale, verbose, stopto
     bestfX = turbo1.bestfX
     ind_best = np.argmin(bestfX)
     f_best, x_best = bestfX[ind_best], bestX[ind_best, :]
+    print("Debug: ", ind_best, f_best)
 
     num_outputs = 8
     #X Progress array, stored as (Batch number, Equilibrium Parameters, Original state, Objective value)

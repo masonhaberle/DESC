@@ -78,6 +78,9 @@ for i in range(2):
         QuasisymmetryTwoTerm(eq=eq_qs, grid=grid_vol, helicity=(1, eq_qs.NFP), weight=1),
         RotationalTransform(eq=eq_qs, grid=grid_vol, target=1.24, weight=20)
     ))
+    
+    objective_f.build()
+    print("Debug: ", objective_f.compute_scalar(objective_f.x()))
 
     constraints = (
         FixBoundaryR(eq=eq_qs, modes=fixed_R_modes),
@@ -95,8 +98,11 @@ for i in range(2):
         optimizer=optimizer,
         copy=True,
         verbose=1,
-        options={"max_time":max_time/2, "trust_regions":1, "box_size":box_size/(10**i), "training_steps": 20, "batch_size":30}
+        options={"max_time":max_time/2, "trust_regions":1, "box_size":box_size/(1000**i), "training_steps": 20, "batch_size":30}
     )
+
+
+
 
     results_array.append(result)
 
