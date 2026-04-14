@@ -56,7 +56,6 @@ grid_vol = LinearGrid(
     sym=eq_qs.sym
 )
 
-eq_qs = eq_init.copy()
 optimizer = Optimizer("Turbo1")
 
 results_array = []
@@ -102,8 +101,6 @@ for i in range(2):
     )
 
 
-
-
     results_array.append(result)
 
 eq_outputs = []
@@ -136,8 +133,9 @@ for i in range(len(eq_outputs)):
 
 with open(outputname+"/obj_history.txt", "w") as obj_history:
     for result in results_array:
-        for item in result.bestfuns:
-            obj_history.write(f"{item[0]:.5f}\n")
+        for item in result.allx:
+            fx = objective_f.compute_scalar(item)
+            obj_history.write(f"{fx:.5f}\n")
 
 
 with open(outputname+"/split_objs.txt", "w") as split_obj:
