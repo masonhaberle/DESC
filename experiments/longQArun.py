@@ -130,7 +130,7 @@ with open(outputname+"/obj_history.txt", "w") as obj_history:
     for result in results_array:
         for item in result.allx:
             fx = objective_f.compute_scalar(item)
-            obj_history.write(f"fx:.5f}\n")
+            obj_history.write(f"{fx:.5f}\n")
 
 with open(outputname+"/split_objs.txt", "w") as split_obj:
     for elt in results_array[0].objectiveRef:
