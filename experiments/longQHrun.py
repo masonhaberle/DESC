@@ -61,7 +61,7 @@ optimizer = Optimizer("Turbo1")
 results_array = []
 
 
-for i in range(2):
+for i in range(3):
     maxMode = orig_max_mode + i
     fixed_R_modes = np.vstack(([0,0,0], eq_qs.surface.R_basis.modes[np.max(np.abs(eq_qs.surface.R_basis.modes), 1) > maxMode, :]))
     fixed_Z_modes = eq_qs.surface.Z_basis.modes[np.max(np.abs(eq_qs.surface.Z_basis.modes), 1) > maxMode, :]
@@ -97,7 +97,7 @@ for i in range(2):
         optimizer=optimizer,
         copy=True,
         verbose=1,
-        options={"max_time":max_time/2, "trust_regions":1, "box_size":box_size/(1000**i), "training_steps": 20, "batch_size":30}
+        options={"max_time":max_time/2, "trust_regions":1, "box_size":box_size/(4**i), "training_steps": 20, "batch_size":30}
     )
 
 
